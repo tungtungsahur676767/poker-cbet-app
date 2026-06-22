@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum SpotType {
+  SRP
+  BET3
+  BET4
+}
+
+enum StrategyScope {
+  EXACT
+  CLASS
+  CUSTOM
+}
+
+model Strategy {
+  id              String        @id @default(cuid())
+  spotType        SpotType
+  scope           StrategyScope
+  title           String?
+  strategyText    String
+  classKey        String?
+  exactFlop       String?
+  exampleFlop     String
+  attachedToLabel String?
+  imageUrl        String?
+  notes           String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([spotType, classKey])
+  @@index([spotType, exactFlop])
+}
+
