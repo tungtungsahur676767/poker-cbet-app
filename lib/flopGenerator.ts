@@ -1,4 +1,3 @@
-import { SpotType } from "@prisma/client";
 import { prisma } from "./prisma";
 import { RANKS, SUITS, Card, cardToString } from "./cards";
 import { analyzeFlop } from "./flopClassifier";
@@ -22,7 +21,7 @@ function shuffle<T>(arr: T[]): T[] {
   return clone;
 }
 
-export async function getRandomUncoveredFlop(spotType: SpotType) {
+export async function getRandomUncoveredFlop(spotType: string) {
   for (let i = 0; i < 300; i++) {
     const d = shuffle(deck());
     const flop = [d[0], d[1], d[2]];
@@ -30,7 +29,7 @@ export async function getRandomUncoveredFlop(spotType: SpotType) {
 
     const exists = await prisma.strategy.findFirst({
       where: {
-        spotType,
+        spotType: spotType as any,
         OR: [
           { exactFlop: analysis.normalizedFlop },
           { classKey: analysis.classKey },

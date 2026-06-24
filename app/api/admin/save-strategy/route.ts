@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { SpotType, StrategyScope } from "@prisma/client";
 import { isAdmin } from "../../../../lib/auth";
 import { prisma } from "../../../../lib/prisma";
 
@@ -32,8 +31,8 @@ export async function POST(req: NextRequest) {
 
     const created = await prisma.strategy.create({
       data: {
-        spotType: spotType as SpotType,
-        scope: scope as StrategyScope,
+        spotType: spotType as any,
+        scope: scope as any,
         strategyText,
         classKey: classKey || null,
         exactFlop: exactFlop || null,

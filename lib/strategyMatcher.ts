@@ -1,14 +1,13 @@
-import { SpotType, Strategy } from "@prisma/client";
 import { prisma } from "./prisma";
 import { analyzeFlop } from "./flopClassifier";
 import { Card } from "./cards";
 
-export async function findStrategy(cards: Card[], spotType: SpotType) {
+export async function findStrategy(cards: Card[], spotType: string) {
   const analysis = analyzeFlop(cards);
 
   const exact = await prisma.strategy.findFirst({
     where: {
-      spotType,
+      spotType: spotType as any,
       exactFlop: analysis.normalizedFlop,
     },
     orderBy: { updatedAt: "desc" },
@@ -24,7 +23,7 @@ export async function findStrategy(cards: Card[], spotType: SpotType) {
 
   const classMatch = await prisma.strategy.findFirst({
     where: {
-      spotType,
+      spotType: spotType as any,
       classKey: analysis.classKey,
     },
     orderBy: { updatedAt: "desc" },
@@ -55,7 +54,7 @@ export async function findStrategy(cards: Card[], spotType: SpotType) {
   };
 }
 
-async function findLooseFallback(classKey: string, spotType: SpotType): Promise<Strategy | null> {
+async function findLooseFallback(classKey: string, spotType: string) {
   const parts = classKey.split("_");
   if (parts.length < 2) return null;
 
@@ -64,7 +63,7 @@ async function findLooseFallback(classKey: string, spotType: SpotType): Promise<
 
   const candidates = await prisma.strategy.findMany({
     where: {
-      spotType,
+      spotType: spotType as any,
       classKey: {
         startsWith: prefix,
         endsWith: texture,
