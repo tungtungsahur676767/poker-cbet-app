@@ -1,5 +1,3 @@
-export const dynamic = "force-dynamic";
-
 import { NextRequest, NextResponse } from "next/server";
 import { parseCard } from "../../../lib/cards";
 import { findStrategy } from "../../../lib/strategyMatcher";
