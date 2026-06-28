@@ -1,9 +1,10 @@
 "use client";
 
+import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import CardPicker from "../../components/CardPicker";
 
-export default function FlopPage() {
+function FlopPageContent() {
   const router = useRouter();
   const params = useSearchParams();
   const spot = params.get("spot") || "SRP";
@@ -33,5 +34,19 @@ export default function FlopPage() {
         <CardPicker onSubmit={handleSubmit} />
       </div>
     </main>
+  );
+}
+
+export default function FlopPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-zinc-950 text-white p-8">
+          <div className="mx-auto max-w-5xl">Chargement...</div>
+        </main>
+      }
+    >
+      <FlopPageContent />
+    </Suspense>
   );
 }
